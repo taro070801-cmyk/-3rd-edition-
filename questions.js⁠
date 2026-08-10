@@ -1,0 +1,16 @@
+const QUESTIONS = [
+  {"id": 1, "star": 3, "era": "原始", "question": "縄文時代の代表的な土器は？", "answer": "縄文土器", "explanation": ""},
+  {"id": 2, "star": 2, "era": "古墳", "question": "古墳時代に大王を中心とする政治連合を何という？", "answer": "ヤマト政権", "explanation": ""},
+  {"id": 3, "star": 1, "era": "飛鳥", "question": "冠位十二階を制定した人物は？", "answer": "聖徳太子", "explanation": ""},
+  {"id": 4, "star": 0, "era": "奈良", "question": "東大寺の大仏造立を進めた天皇は？", "answer": "聖武天皇", "explanation": ""},
+  {"id": 5, "star": 3, "era": "平安", "question": "『源氏物語』の作者は？", "answer": "紫式部", "explanation": ""},
+  {"id": 6, "star": 2, "era": "鎌倉", "question": "鎌倉幕府を開いた人物は？", "answer": "源頼朝", "explanation": ""},
+  {"id": 7, "star": 1, "era": "室町", "question": "室町幕府を開いた人物は？", "answer": "足利尊氏", "explanation": ""},
+  {"id": 8, "star": 0, "era": "安土桃山", "question": "楽市・楽座を行った人物として知られるのは？", "answer": "織田信長", "explanation": ""},
+  {"id": 9, "star": 3, "era": "江戸", "question": "江戸幕府を開いた人物は？", "answer": "徳川家康", "explanation": ""},
+  {"id": 10, "star": 2, "era": "江戸", "question": "大政奉還を行った将軍は？", "answer": "徳川慶喜", "explanation": ""},
+  {"id": 11, "star": 1, "era": "明治", "question": "1868年に出された政治方針を示す文書は？", "answer": "五箇条の御誓文", "explanation": ""},
+  {"id": 12, "star": 0, "era": "明治", "question": "日清戦争後、日本と清の間で結ばれた条約は？", "answer": "下関条約", "explanation": ""},
+  {"id": 13, "star": 3, "era": "大正", "question": "1918年に成立した本格的な政党内閣の首相は？", "answer": "原敬", "explanation": ""},
+  {"id": 14, "star": 2, "era": "昭和", "question": "日本国憲法が施行された年は？", "answer": "1947年", "explanation": ""}
+];
