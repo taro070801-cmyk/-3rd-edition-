@@ -13,4 +13,3 @@ const QUESTIONS = [
   {"id": 12, "star": 0, "era": "明治", "question": "日清戦争後、日本と清の間で結ばれた条約は？", "answer": "下関条約", "explanation": ""},
   {"id": 13, "star": 3, "era": "大正", "question": "1918年に成立した本格的な政党内閣の首相は？", "answer": "原敬", "explanation": ""},
   {"id": 14, "star": 2, "era": "昭和", "question": "日本国憲法が施行された年は？", "answer": "1947年", "explanation": ""}
-];
