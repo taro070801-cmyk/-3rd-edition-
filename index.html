@@ -6,62 +6,79 @@
   <title>日本史 一問一答</title>
   <link rel="manifest" href="manifest.json">
   <style>
-    body { font-family: sans-serif; background: #f4f6f8; margin: 0; padding: 16px; color: #333; }
-    .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    h1 { text-align: center; margin-bottom: 20px; font-size: 24px; }
-    .card { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-    label { font-weight: bold; display: block; margin-bottom: 8px; }
-    select, button { width: 100%; padding: 12px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
-    button { background: #007bff; color: white; font-weight: bold; border: none; margin-top: 10px; cursor: pointer; border-radius: 8px; }
-    button:active { background: #0056b3; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f2f2f7; margin: 0; padding: 16px; color: #1c1c1e; }
+    .container { max-width: 480px; margin: 0 auto; }
+    h1 { text-align: center; font-size: 24px; margin-bottom: 16px; font-weight: 700; }
+    
+    .nav-tabs { display: flex; background: #e3e3e8; padding: 4px; border-radius: 10px; margin-bottom: 16px; }
+    .tab { flex: 1; text-align: center; padding: 8px 0; font-size: 14px; font-weight: 600; border-radius: 7px; cursor: pointer; color: #3a3a3c; }
+    .tab.active { background: #fff; color: #000; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card-title { font-size: 14px; color: #8e8e93; margin-bottom: 6px; font-weight: 500; }
+    .card-value { font-size: 22px; font-weight: bold; }
+    
+    label { font-weight: 600; display: block; margin-bottom: 8px; font-size: 16px; }
+    select { width: 100%; padding: 12px; font-size: 16px; border-radius: 10px; border: 1px solid #d1d1d6; background: #f9f9fb; appearance: none; -webkit-appearance: none; }
+    
+    .btn-start { width: 100%; background: #007aff; color: #fff; border: none; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; }
+    .btn-start:active { background: #0056b3; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>日本史 一問一答</h1>
-    
+
+    <div class="nav-tabs">
+      <div class="tab active">ホーム</div>
+      <div class="tab">進歩</div>
+      <div class="tab">復習</div>
+      <div class="tab">検索</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">日本史 完成度</div>
+      <div class="card-value">0% <span style="font-size: 12px; color: #8e8e93; font-weight: normal;">全回答の正答率</span></div>
+    </div>
+
     <div class="card">
       <label for="eraSelect">📚 時代選択</label>
-      <select id="eraSelect">
-        <option value="ALL">すべて</option>
+      <select id="eraSelect"></select>
+    </div>
+
+    <div class="card">
+      <label for="modeSelect">🎯 モード</label>
+      <select id="modeSelect">
+        <option value="all">すべて</option>
+        <option value="unanswered">未回答</option>
+        <option value="mistaken">間違えた問題</option>
       </select>
     </div>
 
-    <button onclick="alert('読み込み成功！正常に動作しています。')">テストスタート</button>
+    <button class="btn-start" onclick="alert('学習を開始します！')">スタート</button>
   </div>
 
+  <script src="questions.js"></script>
   <script>
-    // 問題データを直接ここに記載
-    const QUESTIONS = [
-      {"id": 1, "star": 3, "era": "原始", "question": "縄文時代の代表的な土器は？", "answer": "縄文土器", "explanation": ""},
-      {"id": 2, "star": 2, "era": "古墳", "question": "古墳時代に大王を中心とする政治連合を何という？", "answer": "ヤマト政権", "explanation": ""},
-      {"id": 3, "star": 1, "era": "飛鳥", "question": "冠位十二階を制定した人物は？", "answer": "聖徳太子", "explanation": ""},
-      {"id": 4, "star": 0, "era": "奈良", "question": "東大寺の大仏造立を進めた天皇は？", "answer": "聖武天皇", "explanation": ""},
-      {"id": 5, "star": 3, "era": "平安", "question": "『源氏物語』の作者は？", "answer": "紫式部", "explanation": ""},
-      {"id": 6, "star": 2, "era": "鎌倉", "question": "鎌倉幕府を開いた人物は？", "answer": "源頼朝", "explanation": ""},
-      {"id": 7, "star": 1, "era": "室町", "question": "室町幕府を開いた人物は？", "answer": "足利尊氏", "explanation": ""},
-      {"id": 8, "star": 0, "era": "安土桃山", "question": "楽市・楽座を行った人物として知られるのは？", "answer": "織田信長", "explanation": ""},
-      {"id": 9, "star": 3, "era": "江戸", "question": "江戸幕府を開いた人物は？", "answer": "徳川家康", "explanation": ""},
-      {"id": 10, "star": 2, "era": "江戸", "question": "大政奉還を行った将軍は？", "answer": "徳川慶喜", "explanation": ""},
-      {"id": 11, "star": 1, "era": "明治", "question": "1868年に出された政治方針を示す文書は？", "answer": "五箇条の御誓文", "explanation": ""},
-      {"id": 12, "star": 0, "era": "明治", "question": "日清戦争後、日本と清の間で結ばれた条約は？", "answer": "下関条約", "explanation": ""},
-      {"id": 13, "star": 3, "era": "大正", "question": "1918年に成立した本格的な政党内閣の首相は？", "answer": "原敬", "explanation": ""},
-      {"id": 14, "star": 2, "era": "昭和", "question": "日本国憲法が施行された年は？", "answer": "1947年", "explanation": ""}
-    ];
-
-    window.addEventListener('DOMContentLoaded', () => {
+    function initApp() {
       const select = document.getElementById('eraSelect');
-      const eras = [...new Set(QUESTIONS.map(q => q.era))];
-      select.innerHTML = '<option value="ALL">すべて</option>';
-      eras.forEach(era => {
-        if (era) {
-          const opt = document.createElement('option');
-          opt.value = era;
-          opt.textContent = era;
-          select.appendChild(opt);
-        }
-      });
-    });
+      let data = (typeof QUESTIONS !== 'undefined') ? QUESTIONS : [];
+      
+      if (data.length > 0) {
+        const eras = [...new Set(data.map(q => q.era))];
+        select.innerHTML = '<option value="ALL">すべて</option>';
+        eras.forEach(era => {
+          if (era) {
+            const opt = document.createElement('option');
+            opt.value = era;
+            opt.textContent = era;
+            select.appendChild(opt);
+          }
+        });
+      }
+    }
+    window.addEventListener('DOMContentLoaded', initApp);
   </script>
 </body>
 </html>
