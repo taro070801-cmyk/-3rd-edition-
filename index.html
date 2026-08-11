@@ -4,89 +4,209 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>日本史 一問一答</title>
+  <link rel="manifest" href="manifest.json">
   <style>
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f2f2f7; margin: 0; padding: 16px; color: #1c1c1e; }
     .container { max-width: 480px; margin: 0 auto; }
-    h1 { text-align: center; font-size: 22px; margin-bottom: 16px; }
-    .card { background: #fff; border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    label { font-weight: bold; display: block; margin-bottom: 8px; }
-    select, button { width: 100%; padding: 14px; font-size: 16px; border-radius: 10px; border: 1px solid #d1d1d6; box-sizing: border-box; }
-    button { background: #007aff; color: white; font-weight: bold; border: none; cursor: pointer; margin-top: 10px; }
-    button:active { background: #0056b3; }
-    .badge { display: inline-block; background: #e5e5ea; padding: 4px 8px; border-radius: 6px; font-size: 12px; margin-bottom: 8px; }
-    .question { font-size: 18px; font-weight: bold; margin-bottom: 16px; }
-    .answer { font-size: 18px; color: #34c759; font-weight: bold; margin-top: 12px; display: none; }
-    .btn-secondary { background: #8e8e93; }
+    h1 { text-align: center; font-size: 24px; margin-bottom: 16px; font-weight: 700; }
+    
+    .nav-tabs { display: flex; background: #e3e3e8; padding: 4px; border-radius: 10px; margin-bottom: 16px; }
+    .tab { flex: 1; text-align: center; padding: 8px 0; font-size: 14px; font-weight: 600; border-radius: 7px; cursor: pointer; color: #3a3a3c; }
+    .tab.active { background: #fff; color: #000; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card-title { font-size: 14px; color: #8e8e93; margin-bottom: 8px; font-weight: 500; }
+    .card-value { font-size: 22px; font-weight: bold; }
+    
+    label { font-weight: 600; display: block; margin-bottom: 8px; font-size: 15px; }
+    select, button { width: 100%; padding: 12px; font-size: 16px; border-radius: 10px; border: 1px solid #d1d1d6; background: #f9f9fb; box-sizing: border-box; }
+    
+    .star-group { display: flex; gap: 8px; }
+    .star-btn { flex: 1; padding: 8px 0; background: #f2f2f7; border: 1px solid #d1d1d6; border-radius: 8px; font-weight: bold; text-align: center; cursor: pointer; }
+    .star-btn.active { background: #ffcc00; border-color: #e6b800; color: #fff; }
+
+    .btn-primary { background: #007aff; color: #fff; border: none; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; margin-top: 8px; }
+    .btn-primary:active { background: #0056b3; }
+    .btn-secondary { background: #8e8e93; color: #fff; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 8px; }
+
+    .badge { display: inline-block; background: #e5e5ea; padding: 4px 8px; border-radius: 6px; font-size: 12px; margin-bottom: 8px; font-weight: 600; }
+    .q-text { font-size: 18px; font-weight: bold; margin-bottom: 16px; line-height: 1.4; }
+    .a-text { font-size: 18px; color: #34c759; font-weight: bold; margin-top: 12px; padding: 12px; background: #e8f8ec; border-radius: 8px; display: none; }
+    .exp-text { font-size: 14px; color: #666; margin-top: 8px; display: none; line-height: 1.4; }
+    .action-btns { display: flex; gap: 8px; margin-top: 12px; }
+    .btn-ok { flex: 1; background: #34c759; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; }
+    .btn-ng { flex: 1; background: #ff3b30; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>日本史 一問一答</h1>
 
-    <!-- 設定画面 -->
+    <!-- トップ設定画面 -->
     <div id="setupView">
+      <div class="nav-tabs">
+        <div class="tab active">ホーム</div>
+        <div class="tab" onclick="alert('進歩画面は開発中です')">進歩</div>
+        <div class="tab" onclick="alert('復習画面は開発中です')">復習</div>
+        <div class="tab" onclick="alert('検索画面は開発中です')">検索</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">日本史 完成度</div>
+        <div class="card-value"><span id="statsAccuracy">0</span>% <span style="font-size: 12px; color: #8e8e93; font-weight: normal;">全回答の正答率</span></div>
+      </div>
+
+      <div class="card">
+        <label>⭐️ 出題する星（難易度）</label>
+        <div class="star-group">
+          <div class="star-btn active" data-star="all" onclick="toggleStar(this)">すべて</div>
+          <div class="star-btn" data-star="3" onclick="toggleStar(this)">★★★</div>
+          <div class="star-btn" data-star="2" onclick="toggleStar(this)">★★</div>
+          <div class="star-btn" data-star="1" onclick="toggleStar(this)">★</div>
+        </div>
+      </div>
+
       <div class="card">
         <label for="eraSelect">📚 時代選択</label>
         <select id="eraSelect"></select>
       </div>
-      <button onclick="startQuiz()">テストスタート</button>
+
+      <div class="card">
+        <label for="modeSelect">🎯 モード</label>
+        <select id="modeSelect">
+          <option value="all">すべて</option>
+          <option value="unanswered">未回答</option>
+          <option value="mistaken">間違えた問題</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <label for="countSelect">⏱️ 問題数</label>
+        <select id="countSelect">
+          <option value="10">10問</option>
+          <option value="20">20問</option>
+          <option value="50">50問</option>
+          <option value="all">全問</option>
+        </select>
+      </div>
+
+      <button class="btn-primary" onclick="startQuiz()">テストスタート</button>
     </div>
 
-    <!-- クイズ画面 -->
+    <!-- クイズ実行画面 -->
     <div id="quizView" style="display:none;">
       <div class="card">
-        <span class="badge" id="eraBadge">時代</span>
-        <div class="question" id="qText">問題がここに表示されます</div>
+        <div>
+          <span class="badge" id="eraBadge">時代</span>
+          <span class="badge" id="starBadge" style="background:#fff3c4; color:#996600;">★★★</span>
+          <span style="float:right; font-size:14px; color:#8e8e93;" id="progressText">1 / 10</span>
+        </div>
+        <div class="q-text" id="qText">問題文</div>
         <button class="btn-secondary" id="ansBtn" onclick="showAnswer()">答えを見る</button>
-        <div class="answer" id="aText">正解</div>
+        <div class="a-text" id="aText">正解</div>
+        <div class="exp-text" id="expText">解説</div>
       </div>
-      <button onclick="nextQuestion()">次の問題へ</button>
-      <button class="btn-secondary" onclick="exitQuiz()" style="margin-top:8px;">TOPに戻る</button>
+
+      <div id="judgeBtns" style="display:none;">
+        <div class="action-btns">
+          <button class="btn-ok" onclick="answerQuestion(true)">〇 正解</button>
+          <button class="btn-ng" onclick="answerQuestion(false)">✕ 不正解</button>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="exitQuiz()" style="margin-top:16px;">TOPに戻る</button>
     </div>
   </div>
 
   <script>
+    // 問題データ（QUESTIONS）
     const QUESTIONS = [
-      {"id": 1, "star": 3, "era": "原始", "question": "縄文時代の代表的な土器は？", "answer": "縄文土器"},
-      {"id": 2, "star": 2, "era": "古墳", "question": "古墳時代に大王を中心とする政治連合を何という？", "answer": "ヤマト政権"},
-      {"id": 3, "star": 1, "era": "飛鳥", "question": "冠位十二階を制定した人物は？", "answer": "聖徳太子"},
-      {"id": 4, "star": 0, "era": "奈良", "question": "東大寺の大仏造立を進めた天皇は？", "answer": "聖武天皇"},
-      {"id": 5, "star": 3, "era": "平安", "question": "『源氏物語』の作者は？", "answer": "紫式部"},
-      {"id": 6, "star": 2, "era": "鎌倉", "question": "鎌倉幕府を開いた人物は？", "answer": "源頼朝"},
-      {"id": 7, "star": 1, "era": "室町", "question": "室町幕府を開いた人物は？", "answer": "足利尊氏"},
-      {"id": 8, "star": 0, "era": "安土桃山", "question": "楽市・楽座を行った人物として知られるのは？", "answer": "織田信長"},
-      {"id": 9, "star": 3, "era": "江戸", "question": "江戸幕府を開いた人物は？", "answer": "徳川家康"},
-      {"id": 10, "star": 2, "era": "江戸", "question": "大政奉還を行った将軍は？", "answer": "徳川慶喜"},
-      {"id": 11, "star": 1, "era": "明治", "question": "1868年に出された政治方針を示す文書は？", "answer": "五箇条の御誓文"},
-      {"id": 12, "star": 0, "era": "明治", "question": "日清戦争後、日本と清の間で結ばれた条約は？", "answer": "下関条約"},
-      {"id": 13, "star": 3, "era": "大正", "question": "1918年に成立した本格的な政党内閣の首相は？", "answer": "原敬"},
-      {"id": 14, "star": 2, "era": "昭和", "question": "日本国憲法が施行された年は？", "answer": "1947年"}
+      {"id": 1, "star": 3, "era": "原始", "question": "縄文時代の代表的な土器は？", "answer": "縄文土器", "explanation": "厚手で黒褐色、縄目の文様が特徴。"},
+      {"id": 2, "star": 2, "era": "古墳", "question": "古墳時代に大王を中心とする政治連合を何という？", "answer": "ヤマト政権", "explanation": "近畿地方を中心とする豪族連合。"},
+      {"id": 3, "star": 1, "era": "飛鳥", "question": "冠位十二階を制定した人物は？", "answer": "聖徳太子", "explanation": "家柄にとらわれず能力に応じた人材登用を目指した。"},
+      {"id": 4, "star": 0, "era": "奈良", "question": "東大寺の大仏造立を進めた天皇は？", "answer": "聖武天皇", "explanation": "仏教の力で国家の安定を図った（鎮護国家思想）。"},
+      {"id": 5, "star": 3, "era": "平安", "question": "『源氏物語』の作者は？", "answer": "紫式部", "explanation": "一条天皇の中宮彰子に仕えた。"},
+      {"id": 6, "star": 2, "era": "鎌倉", "question": "鎌倉幕府を開いた人物は？", "answer": "源頼朝", "explanation": "1192年に征夷大将軍に任命された。"},
+      {"id": 7, "star": 1, "era": "室町", "question": "室町幕府を開いた人物は？", "answer": "足利尊氏", "explanation": "1336年に建武式目を定め、幕府を開いた。"},
+      {"id": 8, "star": 0, "era": "安土桃山", "question": "楽市・楽座を行った人物として知られるのは？", "answer": "織田信長", "explanation": "座の特権を廃止し、自由な取引を認めて城下町を活性化させた。"},
+      {"id": 9, "star": 3, "era": "江戸", "question": "江戸幕府を開いた人物は？", "answer": "徳川家康", "explanation": "1603年に征夷大将軍に任命された。"},
+      {"id": 10, "star": 2, "era": "江戸", "question": "大政奉還を行った将軍は？", "answer": "徳川慶喜", "explanation": "1867年に政権を朝廷に返還した第15代将軍。"},
+      {"id": 11, "star": 1, "era": "明治", "question": "1868年に出された政治方針を示す文書は？", "answer": "五箇条の御誓文", "explanation": "明治天皇が神々に誓う形式で出された。"},
+      {"id": 12, "star": 0, "era": "明治", "question": "日清戦争後、日本と清の間で結ばれた条約は？", "answer": "下関条約", "explanation": "1895年締結。全権は伊藤博文と陸奥宗光。"},
+      {"id": 13, "star": 3, "era": "大正", "question": "1918年に成立した本格的な政党内閣の首相は？", "answer": "原敬", "explanation": "平民宰相と呼ばれた立憲政友会総裁。"},
+      {"id": 14, "star": 2, "era": "昭和", "question": "日本国憲法が施行された年は？", "answer": "1947年", "explanation": "1946年11月3日公布、1947年5月3日施行。"}
     ];
 
+    let selectedStar = "all";
     let currentQuestions = [];
     let currentIndex = 0;
+    let history = JSON.parse(localStorage.getItem('history') || '{}');
 
     window.addEventListener('DOMContentLoaded', () => {
+      initEraSelect();
+      updateStats();
+    });
+
+    function initEraSelect() {
       const select = document.getElementById('eraSelect');
       const eras = [...new Set(QUESTIONS.map(q => q.era))];
       select.innerHTML = '<option value="ALL">すべて</option>';
       eras.forEach(era => {
-        const opt = document.createElement('option');
-        opt.value = era;
-        opt.textContent = era;
-        select.appendChild(opt);
+        if (era) {
+          const opt = document.createElement('option');
+          opt.value = era;
+          opt.textContent = era;
+          select.appendChild(opt);
+        }
       });
-    });
+    }
+
+    function toggleStar(el) {
+      document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      selectedStar = el.getAttribute('data-star');
+    }
+
+    function updateStats() {
+      const keys = Object.keys(history);
+      if (keys.length === 0) {
+        document.getElementById('statsAccuracy').textContent = '0';
+        return;
+      }
+      const corrects = keys.filter(k => history[k] === true).length;
+      const rate = Math.round((corrects / keys.length) * 100);
+      document.getElementById('statsAccuracy').textContent = rate;
+    }
 
     function startQuiz() {
       const selectedEra = document.getElementById('eraSelect').value;
-      if (selectedEra === 'ALL') {
-        currentQuestions = [...QUESTIONS];
-      } else {
-        currentQuestions = QUESTIONS.filter(q => q.era === selectedEra);
+      const mode = document.getElementById('modeSelect').value;
+      const countVal = document.getElementById('countSelect').value;
+
+      let filtered = QUESTIONS.filter(q => {
+        if (selectedStar !== 'all' && q.star != selectedStar) return false;
+        if (selectedEra !== 'ALL' && q.era !== selectedEra) return false;
+        if (mode === 'unanswered' && history[q.id] !== undefined) return false;
+        if (mode === 'mistaken' && history[q.id] !== false) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        alert('条件に一致する問題がありません。');
+        return;
       }
+
+      // ランダムシャッフル
+      filtered.sort(() => Math.random() - 0.5);
+
+      if (countVal !== 'all') {
+        filtered = filtered.slice(0, parseInt(countVal));
+      }
+
+      currentQuestions = filtered;
       currentIndex = 0;
+
       document.getElementById('setupView').style.display = 'none';
       document.getElementById('quizView').style.display = 'block';
       loadQuestion();
@@ -94,24 +214,47 @@
 
     function loadQuestion() {
       if (currentIndex >= currentQuestions.length) {
-        alert('選択した時代の問題がすべて終了しました！');
+        alert('すべての問題が終了しました！');
         exitQuiz();
         return;
       }
+
       const q = currentQuestions[currentIndex];
       document.getElementById('eraBadge').textContent = q.era;
+      document.getElementById('starBadge').textContent = '★'.repeat(q.star || 1);
+      document.getElementById('progressText').textContent = `${currentIndex + 1} / ${currentQuestions.length}`;
       document.getElementById('qText').textContent = q.question;
+      
       document.getElementById('aText').textContent = '答: ' + q.answer;
       document.getElementById('aText').style.display = 'none';
+      
+      const expEl = document.getElementById('expText');
+      if (q.explanation) {
+        expEl.textContent = '【解説】' + q.explanation;
+      } else {
+        expEl.textContent = '';
+      }
+      expEl.style.display = 'none';
+
       document.getElementById('ansBtn').style.display = 'block';
+      document.getElementById('judgeBtns').style.display = 'none';
     }
 
     function showAnswer() {
       document.getElementById('aText').style.display = 'block';
+      if (document.getElementById('expText').textContent) {
+        document.getElementById('expText').style.display = 'block';
+      }
       document.getElementById('ansBtn').style.display = 'none';
+      document.getElementById('judgeBtns').style.display = 'block';
     }
 
-    function nextQuestion() {
+    function answerQuestion(isCorrect) {
+      const q = currentQuestions[currentIndex];
+      history[q.id] = isCorrect;
+      localStorage.setItem('history', JSON.stringify(history));
+      updateStats();
+
       currentIndex++;
       loadQuestion();
     }
@@ -119,6 +262,7 @@
     function exitQuiz() {
       document.getElementById('setupView').style.display = 'block';
       document.getElementById('quizView').style.display = 'none';
+      updateStats();
     }
   </script>
 </body>
