@@ -1,91 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<link rel="manifest" href="manifest.json">
-<title>日本史 一問一答</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#f5f5f7;color:#111827}
-header{padding:18px 16px 10px;background:white;position:sticky;top:0;z-index:2;border-bottom:1px solid #ddd}
-h1{font-size:24px;margin:0}.wrap{max-width:720px;margin:auto;padding:12px 12px 32px}
-.card{background:white;border-radius:16px;padding:16px;margin:10px 0;box-shadow:0 1px 4px #0001}
-label{display:block;padding:9px 0}select,input,button{font:inherit}select,input{width:100%;padding:11px;border:1px solid #ccc;border-radius:10px;background:white}
-.stars{display:grid;grid-template-columns:1fr 1fr;gap:8px}.starbtn{padding:12px;border:1px solid #ccc;border-radius:10px;background:white}.starbtn.on{background:#e8f0ff;border-color:#2563eb}
-button{border:0;border-radius:11px;padding:11px 14px;background:#2563eb;color:white;font-weight:700}.secondary{background:#e5e7eb;color:#111827}.danger{background:#dc2626}
-.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.hidden{display:none}.bigq{font-size:23px;font-weight:700;text-align:center;min-height:130px;display:flex;align-items:center;justify-content:center}.answer{font-size:30px;font-weight:800;text-align:center;padding:20px}.actions{display:flex;gap:8px}.actions button{flex:1}.muted{color:#6b7280;font-size:13px}.progress{height:10px;background:#e5e7eb;border-radius:99px;overflow:hidden}.bar{height:100%;background:#2563eb}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px}.tabs button{font-size:12px;padding:9px 4px;background:#e5e7eb;color:#111827}.tabs button.active{background:#111827;color:white}
-.listitem{padding:12px 0;border-bottom:1px solid #eee}.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:#eee;font-size:12px;margin-right:5px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日本史 一問一答</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { font-family: sans-serif; background: #f4f6f8; margin: 0; padding: 16px; color: #333; }
+    .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1 { text-align: center; margin-bottom: 20px; font-size: 24px; }
+    .card { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    label { font-weight: bold; display: block; margin-bottom: 8px; }
+    select, button { width: 100%; padding: 12px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+    button { background: #007bff; color: white; font-weight: bold; border: none; margin-top: 10px; cursor: pointer; }
+    button:active { background: #0056b3; }
+  </style>
 </head>
 <body>
-<header><div class="wrap"><h1>日本史 一問一答</h1></div></header>
-<div class="wrap">
-<div class="tabs">
-<button class="active" onclick="showTab('home',this)">ホーム</button>
-<button onclick="showTab('progress',this)">進捗</button>
-<button onclick="showTab('review',this)">復習</button>
-<button onclick="showTab('search',this)">検索</button>
-</div>
+  <div class="container">
+    <h1>日本史 一問一答</h1>
+    
+    <div class="card">
+      <label for="eraSelect">📚 時代選択</label>
+      <select id="eraSelect">
+        <option value="ALL">すべて</option>
+      </select>
+    </div>
 
-<section id="home">
-<div class="card"><b>日本史 完成度</b><div class="row"><strong id="accuracy">0%</strong><span class="muted">全回答の正答率</span></div><div class="progress"><div id="accuracyBar" class="bar" style="width:0%"></div></div></div>
-<div class="card"><b>⭐ 出題する星</b><div id="stars" class="stars"></div></div>
-<div class="card"><label>📚 時代<select id="era"></select></label></div>
-<div class="card"><label>🎯 モード<select id="mode"><option>すべて</option><option>間違えた</option><option>未回答</option><option>今日の復習</option></select></label></div>
-<div class="card"><label>⏱ 問題数<select id="count"><option>10</option><option>30</option><option>50</option><option>100</option></select></label><label><input id="weak" type="checkbox" checked style="width:auto"> 間違えた問題を優先</label></div>
-<button style="width:100%" onclick="startQuiz()">この条件で開始</button>
-</section>
+    <button onclick="alert('読み込み成功！')">テストスタート</button>
+  </div>
 
-<section id="quiz" class="hidden">
-<div class="card"><div class="row"><span id="qnum"></span><span id="qmeta" class="muted" style="text-align:right"></span></div><div id="question" class="bigq"></div><div id="answer" class="answer hidden"></div><button id="reveal" style="width:100%" onclick="reveal()">答えを見る</button><div id="answerBtns" class="actions hidden"><button class="danger" onclick="mark(false)">❌ 間違えた</button><button onclick="mark(true)">⭕ 正解</button></div></div></section>
-
-<section id="progress" class="hidden"><div class="card"><h2>学習進捗</h2><div id="progressList"></div><h3>🔥 苦手問題</h3><div id="weakList"></div></div></section>
-<section id="review" class="hidden"><div class="card"><h2>今日の復習</h2><div id="reviewList"></div></div></section>
-<section id="search" class="hidden"><div class="card"><input id="searchInput" placeholder="問題・答え・時代を検索" oninput="renderSearch()"><div id="searchList"></div></div></section>
-</div>
-<script src="questions.js"></script>
-<script>
-let records=JSON.parse(localStorage.getItem('jh_records')||'{}');
-let selectedStars=new Set([3,2]), quiz=[], qi=0, answered=false;
-const eras=["すべて",...new Set(QUESTIONS.map(q=>q.era))];
-document.getElementById('era').innerHTML=eras.map(e=>`<option>${e}</option>`).join('');
-document.getElementById('stars').innerHTML=[3,2,1,0].map(s=>`<button class="starbtn ${selectedStars.has(s)?'on':''}" onclick="toggleStar(${s},this)">${s?('⭐'.repeat(s)):'無印'}</button>`).join('');
-function toggleStar(s,b){selectedStars.has(s)?selectedStars.delete(s):selectedStars.add(s);b.classList.toggle('on')}
-function rec(id){return records[id]||{attempts:0,correct:0,wrong:0,nextReview:null}}
-function save(){localStorage.setItem('jh_records',JSON.stringify(records))}
-function filtered(){
- const era=document.getElementById('era').value, mode=document.getElementById('mode').value, now=Date.now();
- return QUESTIONS.filter(q=>selectedStars.has(q.star)&&(era==='すべて'||q.era===era)).filter(q=>{
-  let r=rec(q.id);
-  if(mode==='間違えた')return r.wrong>0;
-  if(mode==='未回答')return r.attempts===0;
-  if(mode==='今日の復習')return r.nextReview&&r.nextReview<=now;
-  return true;
- })
-}
-function startQuiz(){
- let p=filtered(); if(document.getElementById('weak').checked)p.sort((a,b)=>rec(b.id).wrong-rec(a.id).wrong);else p.sort(()=>Math.random()-.5);
- quiz=p.slice(0,+document.getElementById('count').value);
- if(!quiz.length){alert('条件に合う問題がありません。');return}
- qi=0;showTab('quiz');renderQuiz()
-}
-function renderQuiz(){let q=quiz[qi];document.getElementById('qnum').textContent=`${qi+1} / ${quiz.length}`;document.getElementById('qmeta').textContent=q.era+' '+(q.star?'⭐'.repeat(q.star):'無印');document.getElementById('question').textContent=q.question;document.getElementById('answer').textContent=q.answer;document.getElementById('answer').classList.add('hidden');document.getElementById('reveal').classList.remove('hidden');document.getElementById('answerBtns').classList.add('hidden')}
-function reveal(){document.getElementById('answer').classList.remove('hidden');document.getElementById('reveal').classList.add('hidden');document.getElementById('answerBtns').classList.remove('hidden')}
-function mark(correct){
- let q=quiz[qi],r=rec(q.id);r.attempts++;if(correct){r.correct++;let d=[1,3,7,14,30][Math.min(r.correct-1,4)];r.nextReview=Date.now()+d*86400000}else{r.wrong++;r.nextReview=Date.now()+86400000}records[q.id]=r;save();
- if(++qi>=quiz.length){alert('🎉 終了！学習記録を保存しました。');showTab('home');renderAll()}else renderQuiz()
-}
-function showTab(id,btn){
- ['home','quiz','progress','review','search'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');
- document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');
- if(id==='progress')renderProgress();if(id==='review')renderReview();if(id==='search')renderSearch();if(id==='home')renderAll()
-}
-function accuracy(){let a=Object.values(records).reduce((s,r)=>s+r.attempts,0),c=Object.values(records).reduce((s,r)=>s+r.correct,0);return a?Math.round(c/a*100):0}
-function renderAll(){let a=accuracy();document.getElementById('accuracy').textContent=a+'%';document.getElementById('accuracyBar').style.width=a+'%'}
-function renderProgress(){let html=eras.slice(1).map(e=>{let qs=QUESTIONS.filter(q=>q.era===e),done=qs.filter(q=>rec(q.id).attempts>0).length;return `<div class="listitem">${e}<span style="float:right">${done}/${qs.length}</span></div>`}).join('');document.getElementById('progressList').innerHTML=html;document.getElementById('weakList').innerHTML=QUESTIONS.filter(q=>rec(q.id).wrong>0).sort((a,b)=>rec(b.id).wrong-rec(a.id).wrong).map(q=>`<div class="listitem">${q.question}<br><span class="muted">間違い ${rec(q.id).wrong}回</span></div>`).join('')||'<p class="muted">まだありません。</p>'}
-function renderReview(){let now=Date.now();document.getElementById('reviewList').innerHTML=QUESTIONS.filter(q=>rec(q.id).nextReview&&rec(q.id).nextReview<=now).map(q=>`<div class="listitem">${q.question}<br><span class="muted">${q.answer}</span></div>`).join('')||'<p class="muted">今日の復習はありません。</p>'}
-function renderSearch(){let t=(document.getElementById('searchInput')?.value||'').trim().toLowerCase();document.getElementById('searchList').innerHTML=QUESTIONS.filter(q=>!t||(q.question+q.answer+q.era).toLowerCase().includes(t)).map(q=>`<div class="listitem"><b>${q.question}</b><br><span class="muted">答え：${q.answer}　${q.era}</span></div>`).join('')}
-renderAll();
-</script>
-</body></html>
+  <script src="questions.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const select = document.getElementById('eraSelect');
+      if (typeof QUESTIONS !== 'undefined' && Array.isArray(QUESTIONS)) {
+        const eras = [...new Set(QUESTIONS.map(q => q.era))];
+        select.innerHTML = '<option value="ALL">すべて</option>';
+        eras.forEach(era => {
+          if (era) {
+            const opt = document.createElement('option');
+            opt.value = era;
+            opt.textContent = era;
+            select.appendChild(opt);
+          }
+        });
+      } else {
+        select.innerHTML = '<option>データの読み込み失敗</option>';
+      }
+    });
+  </script>
+</body>
+</html>
